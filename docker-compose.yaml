@@ -1,0 +1,7 @@
+version: "3"
+services:
+  redis:
+    restart: always
+    build: middleware/redis
+    ports:
+      - 6379:6379
