@@ -58,7 +58,6 @@ jobs:
           export VPC_ACCESS_CONNECTOR_NAME=projects/${GOOGLE_PROJECT_ID}/locations/${GOOGLE_COMPUTE_REGION}/connectors/access-connector
           chmod +x extcat.sh
           cat ./app.tpl.yaml | ./extcat.sh > ./app.yaml
-#          sudo apt-get install google-cloud-sdk-app-engine-go
           echo ${GOOGLE_SERVICE_KEY} | base64 -d > ./service_key.json
           echo 'github-actions@${GOOGLE_PROJECT_ID}.iam.gserviceaccount.com' | gcloud auth activate-service-account --key-file ./service_key.json
           gcloud app deploy app.yaml --project ${GOOGLE_PROJECT_ID}
