@@ -35,8 +35,7 @@ jobs:
         working-directory: ./apiServer
         run: |
           go get -v -t -d ./...
-          npm install --prefix ./front
-          npm run build --prefix ./front
+          go mod edit -replace=github.com/${GITHUB_REPOSITORY}/apiServer=./
       - name: Deploy to GAE
         working-directory: ./apiServer
         run: |
