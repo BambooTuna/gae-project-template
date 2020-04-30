@@ -39,6 +39,10 @@ export API_SERVER_ENDPOINT=http://localhost
 
 cd ${HOME_DIE}/apiServer
 go get -v -t -d ./...
+
+// Bacause gae-project-templete is private repository.
+go mod edit -replace=github.com/BambooTuna/gae-project-templete/apiServer=./
+
 cat ./app.tpl.yml | ./extcat.sh > ./app.yml
 
 echo 'github-actions@${TF_VAR_GOOGLE_PROJECT_ID}.iam.gserviceaccount.com' | gcloud auth activate-service-account --key-file ${HOME_DIE}/terraform/account.json
@@ -47,6 +51,8 @@ gcloud app deploy app.yml --project ${TF_VAR_GOOGLE_PROJECT_ID} --quiet
 
 ### サーバーデプロイ
 ```bash
+cd ${HOME_DIE}
 if cd middleware; then git pull; else git clone https://github.com/BambooTuna/middleware.git middleware; fi
 
+ssh -o "StrictHostKeyChecking=no" -p ${TF_VAR_SSH_PORT} ${SSH_USERNAME}@34.85.105.79  -i ${HOME_DIE}/terraform/my-ssh-key 'bash -s' < ${HOME_DIE}/deploy.sh https://${SSH_USERNAME}:bc23f7683c9b099613ead4e60c9ff0bb32720cb9@github.com/BambooTuna/gae-project-templete
 ```

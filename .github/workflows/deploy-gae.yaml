@@ -1,0 +1,52 @@
+name: Deploy front reverse proxy servre to GAE
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build-deploy-gae:
+    name: Build front and deploy to gae
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [10.16.0]
+        go-version: [1.13]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Set up Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: npm install, build
+        working-directory: ./front
+        run: |
+          npm install
+          npm run build
+      - name: move static files
+        run: |
+          mv ./front/dist ./apiServer/dist
+      - name: Go Get dependencies
+        working-directory: ./apiServer
+        run: |
+          go get -v -t -d ./...
+          npm install --prefix ./front
+          npm run build --prefix ./front
+      - name: Deploy to GAE
+        working-directory: ./apiServer
+        run: |
+          chmod +x extcat.sh
+          cat ./app.tpl.yml | ./extcat.sh > ./app.yml
+          sudo apt-get install google-cloud-sdk-app-engine-go
+          echo ${GOOGLE_SERVICE_KEY} | base64 -d > ./service_key.json
+          echo 'github-actions@${GOOGLE_PROJECT_ID}.iam.gserviceaccount.com' | gcloud auth activate-service-account --key-file ./service_key.json
+          gcloud app deploy app.yaml --project ${GOOGLE_PROJECT_ID}
+        env:
+          GOOGLE_SERVICE_KEY: ${{ secrets.GOOGLE_SERVICE_KEY }}
+          GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+

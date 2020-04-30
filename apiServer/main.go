@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/BambooTuna/gae-project-templete/apiServer/interfaces"
-	"github.com/BambooTuna/gae-project-templete/swagger/docs"
+	"github.com/BambooTuna/gae-project-templete/apiServer/swagger/docs"
 	"github.com/BambooTuna/go-server-lib/config"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
