@@ -24,7 +24,6 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
       - name: Cache node_modules
-        working-directory: ./front
         uses: actions/cache@v1
         with:
           path: ~/.npm
@@ -32,7 +31,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Cache Go modules
-        working-directory: ./apiServer
         uses: actions/cache@v1
         with:
           path: ~/go/pkg/mod
