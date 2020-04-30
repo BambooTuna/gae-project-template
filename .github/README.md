@@ -4,13 +4,11 @@
 - GOOGLE_PROJECT_ID
 - GOOGLE_COMPUTE_REGION
 
-    Optional
-    default: asia-northeast1
+    asia-northeast1
 
 - GOOGLE_COMPUTE_ZONE
 
-    Optional
-    default: asia-northeast1-a
+    asia-northeast1-a
 
 - GOOGLE_SERVICE_KEY
 
