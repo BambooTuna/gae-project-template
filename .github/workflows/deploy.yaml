@@ -23,6 +23,22 @@ jobs:
         uses: actions/setup-go@v1
         with:
           go-version: ${{ matrix.go-version }}
+      - name: Cache node_modules
+        working-directory: ./front
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Cache Go modules
+        working-directory: ./apiServer
+        uses: actions/cache@v1
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
       - name: npm install, build
         working-directory: ./front
         run: |
@@ -41,8 +57,8 @@ jobs:
         run: |
           export VPC_ACCESS_CONNECTOR_NAME=projects/${GOOGLE_PROJECT_ID}/locations/${GOOGLE_COMPUTE_REGION}/connectors/access-connector
           chmod +x extcat.sh
-          cat ./app.tpl.yml | ./extcat.sh > ./app.yml
-          sudo apt-get install google-cloud-sdk-app-engine-go
+          cat ./app.tpl.yaml | ./extcat.sh > ./app.yaml
+#          sudo apt-get install google-cloud-sdk-app-engine-go
           echo ${GOOGLE_SERVICE_KEY} | base64 -d > ./service_key.json
           echo 'github-actions@${GOOGLE_PROJECT_ID}.iam.gserviceaccount.com' | gcloud auth activate-service-account --key-file ./service_key.json
           gcloud app deploy app.yaml --project ${GOOGLE_PROJECT_ID}
