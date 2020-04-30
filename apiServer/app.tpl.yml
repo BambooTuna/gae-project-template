@@ -20,4 +20,3 @@ vpc_access_connector:
 env_variables:
   PORT: 8080
   GIN_MODE: release
-  API_SERVER_ENDPOINT: <% API_SERVER_ENDPOINT %>
