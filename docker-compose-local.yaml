@@ -1,0 +1,31 @@
+version: "3"
+services:
+  reverse-proxy-server:
+    restart: always
+    build:
+      context: .
+      dockerfile: reverseProxyServer/Dockerfile-local
+      args:
+        - PACKAGE_REPOSITORY=github.com/BambooTuna/gae-project-template/reverseProxyServer
+    ports:
+      - 8080:8080
+    environment:
+      - API_SERVER_ENDPOINT=http://api-server:18080
+    depends_on:
+      - api-server
+
+  api-server:
+    restart: always
+    build:
+      context: apiServer
+      args:
+        - PACKAGE_REPOSITORY=github.com/BambooTuna/gae-project-template/apiServer
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+
+  redis:
+    restart: always
+    build: middleware/redis

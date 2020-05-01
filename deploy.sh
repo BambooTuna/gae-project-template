@@ -13,8 +13,6 @@ else
   cd app
 fi
 
-chmod 755 ${PWD}
-
 # ミドルウェアを取得
 if cd middleware; then
   git pull;
