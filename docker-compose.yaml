@@ -1,5 +1,19 @@
 version: "3"
 services:
+  api-server:
+    restart: always
+    build:
+      context: apiServer
+      args:
+        - PACKAGE_REPOSITORY=github.com/BambooTuna/gae-project-template/apiServer
+    ports:
+      - 18080:18080
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+
   redis:
     restart: always
     build: middleware/redis

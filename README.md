@@ -1,3 +1,22 @@
+# gae-project-template
+フロントとREST APIのリバースプロキシサーバーをGAEに乗せ、APIサーバー・DBをGCEに乗せて、
+間の通信を`vpc access connector`で行うプロジェクトのテンプレート
+
+- Pros
+1. GAE・GCEの無料枠に強引に収めることができる
+2. GAEのドメインはhttpsなので、混合コンテンツのデフォルトブロックを防ぐことができる
+※ロードバランサーなどを使ってhttps化するのは面倒
+
+- Cons
+1. https化する必要がないのであれば、普通にGCE+docker-composeを使った方が楽
+2. スケールさせたい場合は素直にk8sを使った方がいい
+
+## 使い方
+
+1. CI/CDに必要な環境変数をGithubActionsに設定する
+[設定すべき環境変数一覧](./.github/README.md)
+
+
 ## ローカル動作確認
 ```bash
 cd ./terraform
@@ -40,8 +59,8 @@ export API_SERVER_ENDPOINT=http://localhost
 cd ${HOME_DIE}/apiServer
 go get -v -t -d ./...
 
-// Bacause gae-project-templete is private repository.
-go mod edit -replace=github.com/BambooTuna/gae-project-templete/apiServer=./
+// Bacause gae-project-template is private repository.
+go mod edit -replace=github.com/BambooTuna/gae-project-template/apiServer=./
 
 cat ./app.tpl.yml | ./extcat.sh > ./app.yml
 
@@ -54,5 +73,5 @@ gcloud app deploy app.yml --project ${TF_VAR_GOOGLE_PROJECT_ID} --quiet
 cd ${HOME_DIE}
 if cd middleware; then git pull; else git clone https://github.com/BambooTuna/middleware.git middleware; fi
 
-ssh -o "StrictHostKeyChecking=no" -p ${TF_VAR_SSH_PORT} ${SSH_USERNAME}@34.85.105.79  -i ${HOME_DIE}/terraform/my-ssh-key 'bash -s' < ${HOME_DIE}/deploy.sh https://${SSH_USERNAME}:bc23f7683c9b099613ead4e60c9ff0bb32720cb9@github.com/BambooTuna/gae-project-templete
+ssh -o "StrictHostKeyChecking=no" -p ${TF_VAR_SSH_PORT} ${SSH_USERNAME}@34.85.105.79  -i ${HOME_DIE}/terraform/my-ssh-key 'bash -s' < ${HOME_DIE}/deploy.sh https://${SSH_USERNAME}:bc23f7683c9b099613ead4e60c9ff0bb32720cb9@github.com/BambooTuna/gae-project-template
 ```

@@ -4,11 +4,11 @@
 - GOOGLE_PROJECT_ID
 - GOOGLE_COMPUTE_REGION
 
-    asia-northeast1
+    例: asia-northeast1
 
 - GOOGLE_COMPUTE_ZONE
 
-    asia-northeast1-a
+    例: asia-northeast1-a
 
 - GOOGLE_SERVICE_KEY
 

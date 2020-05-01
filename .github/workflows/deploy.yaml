@@ -44,14 +44,14 @@ jobs:
           npm run build
       - name: move static files
         run: |
-          mv ./front/dist ./apiServer/dist
+          mv ./front/dist ./reverseProxyServer/dist
       - name: Go Get dependencies
-        working-directory: ./apiServer
+        working-directory: ./reverseProxyServer
         run: |
           go get -v -t -d ./...
-          go mod edit -replace=github.com/${GITHUB_REPOSITORY}/apiServer=./
+          go mod edit -replace=github.com/${GITHUB_REPOSITORY}/reverseProxyServer=./
       - name: Deploy to GAE
-        working-directory: ./apiServer
+        working-directory: ./reverseProxyServer
         run: |
           export VPC_ACCESS_CONNECTOR_NAME=projects/${GOOGLE_PROJECT_ID}/locations/${GOOGLE_COMPUTE_REGION}/connectors/access-connector
           chmod +x extcat.sh
