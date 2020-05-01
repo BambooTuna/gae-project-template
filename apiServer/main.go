@@ -20,7 +20,7 @@ func main() {
 
 	if gin.Mode() == gin.DebugMode {
 		docs.SwaggerInfo.Schemes = []string{"http", "https"}
-		docs.SwaggerInfo.Host = ""
+		docs.SwaggerInfo.Host = fmt.Sprintf("localhost:%s", serverPort)
 		docs.SwaggerInfo.BasePath = ""
 		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
