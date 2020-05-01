@@ -15,7 +15,7 @@ jobs:
         run: |
           cd terraform
           echo ${TF_VAR_GOOGLE_SERVICE_KEY} | base64 -d > ${TF_VAR_GOOGLE_CREDENTIALS_JSON_PATH}
-          export TF_VAR_SSH_PUB_KEY=`echo ${SSH_KEY_PUB} | base64 -d`
+          export TF_VAR_SSH_PUB_KEY=${SSH_USERNAME}:`echo ${SSH_KEY_PUB} | base64 -d`
           sed -e "s/<%SHH_PORT%>/${TF_VAR_SSH_PORT}/" cloud-config.tpl > cloud-config
           terraform init
           sh import.sh
@@ -28,3 +28,4 @@ jobs:
           TF_VAR_GOOGLE_CREDENTIALS_JSON_PATH: ./account.json
           TF_VAR_SSH_PORT: ${{ secrets.SSH_PORT }}
           SSH_KEY_PUB: ${{ secrets.SSH_KEY_PUB }}
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
