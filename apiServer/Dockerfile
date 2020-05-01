@@ -10,8 +10,10 @@ ARG PACKAGE_REPOSITORY=${PACKAGE_REPOSITORY:-github.com/BambooTuna/gae-project-t
 WORKDIR /go/src/${PACKAGE_REPOSITORY}
 COPY . .
 RUN go get ./... && \
-go build -o app && \
-mv app /app
+    go get github.com/swaggo/swag/cmd/swag && \
+    swag init --dir . --output ./swagger/docs && \
+    go build -o app && \
+    mv app /app
 
 FROM scratch
 # 軽量のalpineには必要ファイルがないため注意
